@@ -73,3 +73,26 @@ li {
 .delete-btn {
     background-color: #dc3545;
 }
+
+.task-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.task-container input[type="checkbox"] {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.task-container span {
+    cursor: pointer;
+}
+
+.completed {
+    text-decoration: line-through;
+    color: gray;
+}
+
