@@ -1,4 +1,5 @@
 
+
 const form = document.getElementById("todo-form");
 const input = document.getElementById("todo-input");
 const list = document.getElementById("todo-list");
@@ -14,19 +15,26 @@ function displayTodos() {
     list.innerHTML = "";
 
     const filteredTodos = todos.filter(todo => {
-        if (currentFilter === "active") {
-            return !todo.completed;
-        }
-
-        if (currentFilter === "completed") {
-            return todo.completed;
-        }
-
+        if (currentFilter === "active") return !todo.completed;
+        if (currentFilter === "completed") return todo.completed;
         return true;
     });
 
     filteredTodos.forEach(todo => {
         const li = document.createElement("li");
+
+        const taskContainer = document.createElement("div");
+        taskContainer.classList.add("task-container");
+
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.checked = todo.completed;
+
+        checkbox.addEventListener("change", () => {
+            todo.completed = checkbox.checked;
+            saveTodos();
+            displayTodos();
+        });
 
         const task = document.createElement("span");
         task.textContent = todo.text;
@@ -35,11 +43,8 @@ function displayTodos() {
             task.classList.add("completed");
         }
 
-        task.addEventListener("click", () => {
-            todo.completed = !todo.completed;
-            saveTodos();
-            displayTodos();
-        });
+        taskContainer.appendChild(checkbox);
+        taskContainer.appendChild(task);
 
         const deleteButton = document.createElement("button");
         deleteButton.textContent = "Delete";
@@ -51,8 +56,9 @@ function displayTodos() {
             displayTodos();
         });
 
-        li.appendChild(task);
+        li.appendChild(taskContainer);
         li.appendChild(deleteButton);
+
         list.appendChild(li);
     });
 }
@@ -62,9 +68,7 @@ form.addEventListener("submit", function(event) {
 
     const taskText = input.value.trim();
 
-    if (taskText === "") {
-        return;
-    }
+    if (taskText === "") return;
 
     todos.push({
         id: Date.now(),
